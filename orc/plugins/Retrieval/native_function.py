@@ -125,7 +125,9 @@ class Retrieval:
             else:
                 if response.json()['value']:
                         for doc in response.json()['value']:
-                            search_results.append("Numero de Caso: "+ doc['Numero_de_Caso']
+                            formatted_result = (
+                            # search_results.append(
+                              "Numero de Caso: "+ doc['Numero_de_Caso']
                             + "Costo Unitario Estimado del Artículo: "+ doc['Costo_Unitario_Estimado_de_Articulo'] + "\n"
                             + "Fecha Recibo de Requisición: "+ doc['Fecha_Recibo_de_Requisicion'] + "\n"
                             + "Número de Requisición: "+ doc['Numero_de_Requisicion'] + "\n"
@@ -149,7 +151,21 @@ class Retrieval:
                             + "Nombre de Suplidor: "+ doc['Nombre_de_Suplidor'] + "\n"
                             + "Teléfono de Contacto del Suplidor: "+ doc['Telefono_de_Contacto_de_Suplidor'] + "\n"
                             + "Email del Suplidor: "+ doc['Email_de_Suplidor'] + "\n"
-                            + "Url de Archivo de Orden De Compra: "+ doc['Url_de_Archivo_de_Orden_de_Compra'] + "\n")      
+                            # + "Url de Archivo de Orden De Compra: "+ doc['Url_de_Archivo_de_Orden_de_Compra'] + "\n")
+                            )
+
+                            # Now handle the URL separately
+                            archivo_url = doc['Url_de_Archivo_de_Orden_de_Compra']
+                            
+                            # Create a clickable hyperlink (in HTML or markdown format)
+                            # HTML format for a clickable link:
+                            hyperlink = f'<a href="{archivo_url}">Archivo de Orden de Compra</a>\n'
+                            
+                            # Or if you're using markdown:
+                            # hyperlink = f'[Archivo de Orden de Compra]({archivo_url})\n'
+
+                            # Append both the formatted result and the hyperlink to search results
+                            search_results.append(formatted_result + "-" * 120 + "\n\n" + hyperlink)      
                     
             response_time =  round(time.time() - start_time,2)
             # logging.info(f"[sk_retrieval] search query body: {body}")        
