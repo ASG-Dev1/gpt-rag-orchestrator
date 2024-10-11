@@ -185,106 +185,107 @@ async def get_answer(history):
                 answer = triage_dict['answer']
                 answer_generated_by = "conversation_plugin_triage"
                 logging.info(f"[code_orchest] triage answer: {answer}")
+
+            # JAMR Commented for testing
+            # elif "price_range" in intents:
+            #     search_query = triage_dict['search_query'] if triage_dict['search_query'] != '' else ask
+
+            #     # run retrieval function
+            #     function_result = await kernel.invoke(retrievalPlugin["VectorIndexRetrieval"], sk.KernelArguments(input=search_query))
+            #     sources = function_result.value
+            #     formatted_sources = sources[:100].replace('\n', ' ')
+            #     escaped_sources = escape_xml_characters(sources)
+            #     arguments["sources"] = escaped_sources
+            #     logging.info(f"[code_orchest] generating bot answer. sources: {formatted_sources}")
             
-            elif "price_range" in intents:
-                search_query = triage_dict['search_query'] if triage_dict['search_query'] != '' else ask
+            #     # Generate the answer augmented by the retrieval
+            #     logging.info(f"[code_orchest] generating bot answer. ask: {ask}")
+            #     start_time = time.time()                                                          
+            #     arguments["history"] = json.dumps(messages[:-1], ensure_ascii=False) # update context with full history
+            #     function_result = await call_semantic_function(kernel, conversationPlugin["PriceRange"], arguments)
+            #     answer =  str(function_result)
+            #     conversation_plugin_answer = answer
+            #     answer_generated_by = "conversation_plugin_answer"
+            #     prompt_tokens += get_usage_tokens(function_result, 'prompt')
+            #     completion_tokens += get_usage_tokens(function_result, 'completion')
+            #     prompt = str(function_result.metadata['messages'][0])
+            #     response_time =  round(time.time() - start_time,2)              
+            #     logging.info(f"[code_orchest] finished generating bot answer. {response_time} seconds. {answer[:100]}.")
 
-                # run retrieval function
-                function_result = await kernel.invoke(retrievalPlugin["VectorIndexRetrieval"], sk.KernelArguments(input=search_query))
-                sources = function_result.value
-                formatted_sources = sources[:100].replace('\n', ' ')
-                escaped_sources = escape_xml_characters(sources)
-                arguments["sources"] = escaped_sources
-                logging.info(f"[code_orchest] generating bot answer. sources: {formatted_sources}")
+            # elif "purchase_order" in intents:
+            #     search_query = triage_dict['search_query'] if triage_dict['search_query'] != '' else ask
+
+            #     # run retrieval function
+            #     function_result = await kernel.invoke(retrievalPlugin["VectorIndexRetrieval"], sk.KernelArguments(input=search_query))
+            #     sources = function_result.value
+            #     formatted_sources = sources[:100].replace('\n', ' ')
+            #     escaped_sources = escape_xml_characters(sources)
+            #     arguments["sources"] = escaped_sources
+            #     logging.info(f"[code_orchest] generating bot answer. sources: {formatted_sources}")
             
-                # Generate the answer augmented by the retrieval
-                logging.info(f"[code_orchest] generating bot answer. ask: {ask}")
-                start_time = time.time()                                                          
-                arguments["history"] = json.dumps(messages[:-1], ensure_ascii=False) # update context with full history
-                function_result = await call_semantic_function(kernel, conversationPlugin["PriceRange"], arguments)
-                answer =  str(function_result)
-                conversation_plugin_answer = answer
-                answer_generated_by = "conversation_plugin_answer"
-                prompt_tokens += get_usage_tokens(function_result, 'prompt')
-                completion_tokens += get_usage_tokens(function_result, 'completion')
-                prompt = str(function_result.metadata['messages'][0])
-                response_time =  round(time.time() - start_time,2)              
-                logging.info(f"[code_orchest] finished generating bot answer. {response_time} seconds. {answer[:100]}.")
+            #     # Generate the answer augmented by the retrieval
+            #     logging.info(f"[code_orchest] generating bot answer. ask: {ask}")
+            #     start_time = time.time()                                                          
+            #     arguments["history"] = json.dumps(messages[:-1], ensure_ascii=False) # update context with full history
+            #     function_result = await call_semantic_function(kernel, conversationPlugin["PurchaseOrder"], arguments)
+            #     answer =  str(function_result)
+            #     conversation_plugin_answer = answer
+            #     answer_generated_by = "conversation_plugin_answer"
+            #     prompt_tokens += get_usage_tokens(function_result, 'prompt')
+            #     completion_tokens += get_usage_tokens(function_result, 'completion')
+            #     prompt = str(function_result.metadata['messages'][0])
+            #     response_time =  round(time.time() - start_time,2)              
+            #     logging.info(f"[code_orchest] finished generating bot answer. {response_time} seconds. {answer[:100]}.")        
 
-            elif "purchase_order" in intents:
-                search_query = triage_dict['search_query'] if triage_dict['search_query'] != '' else ask
+            # elif "specifications" in intents:
+            #     search_query = triage_dict['search_query'] if triage_dict['search_query'] != '' else ask
 
-                # run retrieval function
-                function_result = await kernel.invoke(retrievalPlugin["VectorIndexRetrieval"], sk.KernelArguments(input=search_query))
-                sources = function_result.value
-                formatted_sources = sources[:100].replace('\n', ' ')
-                escaped_sources = escape_xml_characters(sources)
-                arguments["sources"] = escaped_sources
-                logging.info(f"[code_orchest] generating bot answer. sources: {formatted_sources}")
+            #     # run retrieval function
+            #     function_result = await kernel.invoke(retrievalPlugin["VectorIndexRetrieval"], sk.KernelArguments(input=search_query))
+            #     sources = function_result.value
+            #     formatted_sources = sources[:100].replace('\n', ' ')
+            #     escaped_sources = escape_xml_characters(sources)
+            #     arguments["sources"] = escaped_sources
+            #     logging.info(f"[code_orchest] generating bot answer. sources: {formatted_sources}")
             
-                # Generate the answer augmented by the retrieval
-                logging.info(f"[code_orchest] generating bot answer. ask: {ask}")
-                start_time = time.time()                                                          
-                arguments["history"] = json.dumps(messages[:-1], ensure_ascii=False) # update context with full history
-                function_result = await call_semantic_function(kernel, conversationPlugin["PurchaseOrder"], arguments)
-                answer =  str(function_result)
-                conversation_plugin_answer = answer
-                answer_generated_by = "conversation_plugin_answer"
-                prompt_tokens += get_usage_tokens(function_result, 'prompt')
-                completion_tokens += get_usage_tokens(function_result, 'completion')
-                prompt = str(function_result.metadata['messages'][0])
-                response_time =  round(time.time() - start_time,2)              
-                logging.info(f"[code_orchest] finished generating bot answer. {response_time} seconds. {answer[:100]}.")        
+            #     # Generate the answer augmented by the retrieval
+            #     logging.info(f"[code_orchest] generating bot answer. ask: {ask}")
+            #     start_time = time.time()                                                          
+            #     arguments["history"] = json.dumps(messages[:-1], ensure_ascii=False) # update context with full history
+            #     function_result = await call_semantic_function(kernel, conversationPlugin["Specifications"], arguments)
+            #     answer =  str(function_result)
+            #     conversation_plugin_answer = answer
+            #     answer_generated_by = "conversation_plugin_answer"
+            #     prompt_tokens += get_usage_tokens(function_result, 'prompt')
+            #     completion_tokens += get_usage_tokens(function_result, 'completion')
+            #     prompt = str(function_result.metadata['messages'][0])
+            #     response_time =  round(time.time() - start_time,2)              
+            #     logging.info(f"[code_orchest] finished generating bot answer. {response_time} seconds. {answer[:100]}.")        
 
-            elif "specifications" in intents:
-                search_query = triage_dict['search_query'] if triage_dict['search_query'] != '' else ask
+            # elif "ice_document_generation" in intents:
+            #     search_query = triage_dict['search_query'] if triage_dict['search_query'] != '' else ask
 
-                # run retrieval function
-                function_result = await kernel.invoke(retrievalPlugin["VectorIndexRetrieval"], sk.KernelArguments(input=search_query))
-                sources = function_result.value
-                formatted_sources = sources[:100].replace('\n', ' ')
-                escaped_sources = escape_xml_characters(sources)
-                arguments["sources"] = escaped_sources
-                logging.info(f"[code_orchest] generating bot answer. sources: {formatted_sources}")
+            #     # run retrieval function
+            #     function_result = await kernel.invoke(retrievalPlugin["VectorIndexRetrieval"], sk.KernelArguments(input=search_query))
+            #     sources = function_result.value
+            #     formatted_sources = sources[:100].replace('\n', ' ')
+            #     escaped_sources = escape_xml_characters(sources)
+            #     arguments["sources"] = escaped_sources
+            #     logging.info(f"[code_orchest] generating bot answer. sources: {formatted_sources}")
             
-                # Generate the answer augmented by the retrieval
-                logging.info(f"[code_orchest] generating bot answer. ask: {ask}")
-                start_time = time.time()                                                          
-                arguments["history"] = json.dumps(messages[:-1], ensure_ascii=False) # update context with full history
-                function_result = await call_semantic_function(kernel, conversationPlugin["Specifications"], arguments)
-                answer =  str(function_result)
-                conversation_plugin_answer = answer
-                answer_generated_by = "conversation_plugin_answer"
-                prompt_tokens += get_usage_tokens(function_result, 'prompt')
-                completion_tokens += get_usage_tokens(function_result, 'completion')
-                prompt = str(function_result.metadata['messages'][0])
-                response_time =  round(time.time() - start_time,2)              
-                logging.info(f"[code_orchest] finished generating bot answer. {response_time} seconds. {answer[:100]}.")        
-
-            elif "ice_document_generation" in intents:
-                search_query = triage_dict['search_query'] if triage_dict['search_query'] != '' else ask
-
-                # run retrieval function
-                function_result = await kernel.invoke(retrievalPlugin["VectorIndexRetrieval"], sk.KernelArguments(input=search_query))
-                sources = function_result.value
-                formatted_sources = sources[:100].replace('\n', ' ')
-                escaped_sources = escape_xml_characters(sources)
-                arguments["sources"] = escaped_sources
-                logging.info(f"[code_orchest] generating bot answer. sources: {formatted_sources}")
-            
-                # Generate the answer augmented by the retrieval
-                logging.info(f"[code_orchest] generating bot answer. ask: {ask}")
-                start_time = time.time()                                                          
-                arguments["history"] = json.dumps(messages[:-1], ensure_ascii=False) # update context with full history
-                function_result = await call_semantic_function(kernel, conversationPlugin["GenerateIceDocument"], arguments)
-                answer =  str(function_result)
-                conversation_plugin_answer = answer
-                answer_generated_by = "conversation_plugin_answer"
-                prompt_tokens += get_usage_tokens(function_result, 'prompt')
-                completion_tokens += get_usage_tokens(function_result, 'completion')
-                prompt = str(function_result.metadata['messages'][0])
-                response_time =  round(time.time() - start_time,2)              
-                logging.info(f"[code_orchest] finished generating bot answer. {response_time} seconds. {answer[:100]}.")
+            #     # Generate the answer augmented by the retrieval
+            #     logging.info(f"[code_orchest] generating bot answer. ask: {ask}")
+            #     start_time = time.time()                                                          
+            #     arguments["history"] = json.dumps(messages[:-1], ensure_ascii=False) # update context with full history
+            #     function_result = await call_semantic_function(kernel, conversationPlugin["GenerateIceDocument"], arguments)
+            #     answer =  str(function_result)
+            #     conversation_plugin_answer = answer
+            #     answer_generated_by = "conversation_plugin_answer"
+            #     prompt_tokens += get_usage_tokens(function_result, 'prompt')
+            #     completion_tokens += get_usage_tokens(function_result, 'completion')
+            #     prompt = str(function_result.metadata['messages'][0])
+            #     response_time =  round(time.time() - start_time,2)              
+            #     logging.info(f"[code_orchest] finished generating bot answer. {response_time} seconds. {answer[:100]}.")
 
             elif intents == ["none"]:
                 logging.info(f"[code_orchest] No intent found, review Triage function.")
