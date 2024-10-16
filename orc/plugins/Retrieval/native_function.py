@@ -14,6 +14,9 @@ if sys.version_info >= (3, 9):
 else:
     from typing_extensions import Annotated
 
+# Prueba
+from flask import jsonify
+
 # Azure OpenAI Integration Settings
 AZURE_OPENAI_EMBEDDING_MODEL = os.environ.get("AZURE_OPENAI_EMBEDDING_MODEL")
 
@@ -120,59 +123,162 @@ class Retrieval:
             if status_code >= 400:
                 error_on_search = True
                 error_message = f'Status code: {status_code}.'
-                if response.text != "": error_message += f" Error: {response.text}."
+                if response.text != "":
+                    error_message += f" Error: {response.text}."
                 logging.error(f"[sk_retrieval] error {status_code} when searching documents. {error_message}")
             else:
-                if response.json()['value']:
-                        for doc in response.json()['value']:
-                            formatted_result = (
-                            # search_results.append(
-                              "Numero de Caso: "+ doc['Numero_de_Caso']
-                            + "Costo Unitario Estimado del Artículo: "+ doc['Costo_Unitario_Estimado_de_Articulo'] + "\n"
-                            + "Fecha Recibo de Requisición: "+ doc['Fecha_Recibo_de_Requisicion'] + "\n"
-                            + "Número de Requisición: "+ doc['Numero_de_Requisicion'] + "\n"
-                            + "Título de Requisición: "+ doc['Titulo_de_Requisicion'] + "\n"
-                            + "Categoría de Requisición: "+ doc['Categoria_de_Requisicion'] + "\n"
-                            + "SubCategoría de Requisición: "+ doc['SubCategoria_de_Requisicion'] + "\n"
-                            + "Agencia: "+ doc['Agencia'] + "\n"
-                            + "Nombre de Agencia de Entrega: "+ doc['Nombre_de_Agencia_de_Entrega'] + "\n"
-                            + "Método de Adquisición: "+ doc['Metodo_de_Adquisicion'] + "\n"
-                            + "Descripción de Artículo: "+ doc['Descripcion_de_Articulo'] + "\n"
-                            + "Marca de Artículo: "+ doc['Marca_de_Articulo'] + "\n"
-                            + "Modelo de Artículo: "+ doc['Modelo_de_Articulo'] + "\n"
-                            + "Garantía de Artículo: "+ doc['Garantia_de_Articulo'] + "\n"
-                            + "Unidad de Medida: "+ doc['Unidad_de_Medida'] + "\n"
-                            + "Cantidad: "+ doc['Cantidad'] + "\n"
-                            + "Costo Estimado Total de Artículo: "+ doc['Costo_Estimado_Total_de_Orden_de_Articulo'] + "\n"
-                            + "Número de Contrato: "+ doc['Numero_de_Contrato'] + "\n"
-                            + "Costo Final del Artículo: "+ doc['Costo_Final_de_Orden_de_Articulo'] + "\n"
-                            + "Número de Orden de Compra: "+ doc['Numero_de_Orden_de_Compra'] + "\n"
-                            + "Nombre de Archivo de Orden de Compra: "+ doc['Nombre_de_Archivo_de_Orden_de_Compra'] + "\n"
-                            + "Nombre de Suplidor: "+ doc['Nombre_de_Suplidor'] + "\n"
-                            + "Teléfono de Contacto del Suplidor: "+ doc['Telefono_de_Contacto_de_Suplidor'] + "\n"
-                            + "Email del Suplidor: "+ doc['Email_de_Suplidor'] + "\n"
-                            # + "Url de Archivo de Orden De Compra: "+ doc['Url_de_Archivo_de_Orden_de_Compra'] + "\n")
-                            )
+                # **Modified Code Starts Here**
+                # Define the list of fields you want to include
+                fields_to_include = [
+                    "Numero_de_Caso",
+                    "Costo_Unitario_Estimado_de_Articulo",
+                    "Fecha_Recibo_de_Requisicion",
+                    "Numero_de_Requisicion",
+                    "Titulo_de_Requisicion",
+                    "Categoria_de_Requisicion",
+                    "SubCategoria_de_Requisicion",
+                    "Agencia",
+                    "Nombre_de_Agencia_de_Entrega",
+                    "Metodo_de_Adquisicion",
+                    "Descripcion_de_Articulo",
+                    "Marca_de_Articulo",
+                    "Modelo_de_Articulo",
+                    "Garantia_de_Articulo",
+                    "Unidad_de_Medida",
+                    "Cantidad",
+                    "Costo_Estimado_Total_de_Orden_de_Articulo",
+                    "Numero_de_Contrato",
+                    "Costo_Final_de_Orden_de_Articulo",
+                    "Numero_de_Orden_de_Compra",
+                    "Nombre_de_Archivo_de_Orden_de_Compra",
+                    "Nombre_de_Suplidor",
+                    "Telefono_de_Contacto_de_Suplidor",
+                    "Email_de_Suplidor",
+                    "Url_de_Archivo_de_Orden_de_Compra"
+                ]
 
-                            # Now handle the URL separately
-                            archivo_url = doc['Url_de_Archivo_de_Orden_de_Compra']
-                            
-                            # Create a clickable hyperlink (in HTML or markdown format)
-                            # HTML format for a clickable link:
-                            hyperlink = f'<a href="{archivo_url}">Archivo de Orden de Compra</a>\n'
-                            
-                            # Or if you're using markdown:
-                            # hyperlink = f'[Archivo de Orden de Compra]({archivo_url})\n'
+                # Use a list comprehension to construct the search results
+                search_results = [
+                    {field: doc.get(field) for field in fields_to_include}
+                    for doc in response.json().get('value', [])
+                ]
+                # **Modified Code Ends Here**
 
-                            # Append both the formatted result and the hyperlink to search results
-                            search_results.append(formatted_result + "-" * 120 + "\n\n" + hyperlink)      
-                    
-            response_time =  round(time.time() - start_time,2)
-            # logging.info(f"[sk_retrieval] search query body: {body}")        
-            logging.info(f"[sk_retrieval] finished querying azure ai search. {response_time} seconds")
+                response_time = round(time.time() - start_time, 2)
+                logging.info(f"[sk_retrieval] finished querying azure ai search. {response_time} seconds")
         except Exception as e:
             error_message = str(e)
             logging.error(f"[sk_retrieval] error when getting the answer {error_message}")
-        
-        sources = ' '.join(search_results)
+
+        # Convert search_results to a JSON string if necessary
+        # If you're using Flask or similar, you can return jsonify(search_results)
+        # For now, we'll convert it to a string
+        sources = search_results  # This is now a list of dictionaries
+        print("Sources")
+        print(sources)
+        print()
+        print("Search Results")
+        print(search_results)
         return sources
+
+
+
+
+
+        #     if status_code >= 400:
+        #         error_on_search = True
+        #         error_message = f'Status code: {status_code}.'
+        #         if response.text != "": error_message += f" Error: {response.text}."
+        #         logging.error(f"[sk_retrieval] error {status_code} when searching documents. {error_message}")
+        #     else:
+        #         if response.json()['value']:
+        #             for doc in response.json()['value']:
+        #                 # Create a dictionary to hold all relevant fields, including the URL
+        #                 formatted_result = {
+        #                     "Numero_de_Caso": doc['Numero_de_Caso'],
+        #                     "Costo_Unitario_Estimado_de_Articulo": doc['Costo_Unitario_Estimado_de_Articulo'],
+        #                     "Fecha_Recibo_de_Requisicion": doc['Fecha_Recibo_de_Requisicion'],
+        #                     "Numero_de_Requisicion": doc['Numero_de_Requisicion'],
+        #                     "Titulo_de_Requisicion": doc['Titulo_de_Requisicion'],
+        #                     "Categoria_de_Requisicion": doc['Categoria_de_Requisicion'],
+        #                     "SubCategoria_de_Requisicion": doc['SubCategoria_de_Requisicion'],
+        #                     "Agencia": doc['Agencia'],
+        #                     "Nombre_de_Agencia_de_Entrega": doc['Nombre_de_Agencia_de_Entrega'],
+        #                     "Metodo_de_Adquisicion": doc['Metodo_de_Adquisicion'],
+        #                     "Descripcion_de_Articulo": doc['Descripcion_de_Articulo'],
+        #                     "Marca_de_Articulo": doc['Marca_de_Articulo'],
+        #                     "Modelo_de_Articulo": doc['Modelo_de_Articulo'],
+        #                     "Garantia_de_Articulo": doc['Garantia_de_Articulo'],
+        #                     "Unidad_de_Medida": doc['Unidad_de_Medida'],
+        #                     "Cantidad": doc['Cantidad'],
+        #                     "Costo_Estimado_Total_de_Orden_de_Articulo": doc['Costo_Estimado_Total_de_Orden_de_Articulo'],
+        #                     "Numero_de_Contrato": doc['Numero_de_Contrato'],
+        #                     "Costo_Final_de_Orden_de_Articulo": doc['Costo_Final_de_Orden_de_Articulo'],
+        #                     "Numero_de_Orden_de_Compra": doc['Numero_de_Orden_de_Compra'],
+        #                     "Nombre_de_Archivo_de_Orden_de_Compra": doc['Nombre_de_Archivo_de_Orden_de_Compra'],
+        #                     "Nombre_de_Suplidor": doc['Nombre_de_Suplidor'],
+        #                     "Telefono_de_Contacto_de_Suplidor": doc['Telefono_de_Contacto_de_Suplidor'],
+        #                     "Email_de_Suplidor": doc['Email_de_Suplidor'],
+        #                     # Include the URL as a separate field, so it can be handled in the frontend
+        #                     "Url_de_Archivo_de_Orden_de_Compra": doc['Url_de_Archivo_de_Orden_de_Compra']
+        #                 }
+                        
+        #                 # Append the dictionary to search results
+        #                 search_results.append(formatted_result)
+                   
+                    
+        #     response_time =  round(time.time() - start_time,2)
+        #     # logging.info(f"[sk_retrieval] search query body: {body}")        
+        #     logging.info(f"[sk_retrieval] finished querying azure ai search. {response_time} seconds")
+        # except Exception as e:
+        #     error_message = str(e)
+        #     logging.error(f"[sk_retrieval] error when getting the answer {error_message}")
+        
+        # sources = ' '.join(search_results)
+        # return sources 
+    
+
+
+
+    # if response.json()['value']:
+                #         for doc in response.json()['value']:
+                #             formatted_result = (
+                #             # search_results.append(
+                #               "Numero de Caso: "+ doc['Numero_de_Caso']
+                #             + "Costo Unitario Estimado del Artículo: "+ doc['Costo_Unitario_Estimado_de_Articulo'] + "\n"
+                #             + "Fecha Recibo de Requisición: "+ doc['Fecha_Recibo_de_Requisicion'] + "\n"
+                #             + "Número de Requisición: "+ doc['Numero_de_Requisicion'] + "\n"
+                #             + "Título de Requisición: "+ doc['Titulo_de_Requisicion'] + "\n"
+                #             + "Categoría de Requisición: "+ doc['Categoria_de_Requisicion'] + "\n"
+                #             + "SubCategoría de Requisición: "+ doc['SubCategoria_de_Requisicion'] + "\n"
+                #             + "Agencia: "+ doc['Agencia'] + "\n"
+                #             + "Nombre de Agencia de Entrega: "+ doc['Nombre_de_Agencia_de_Entrega'] + "\n"
+                #             + "Método de Adquisición: "+ doc['Metodo_de_Adquisicion'] + "\n"
+                #             + "Descripción de Artículo: "+ doc['Descripcion_de_Articulo'] + "\n"
+                #             + "Marca de Artículo: "+ doc['Marca_de_Articulo'] + "\n"
+                #             + "Modelo de Artículo: "+ doc['Modelo_de_Articulo'] + "\n"
+                #             + "Garantía de Artículo: "+ doc['Garantia_de_Articulo'] + "\n"
+                #             + "Unidad de Medida: "+ doc['Unidad_de_Medida'] + "\n"
+                #             + "Cantidad: "+ doc['Cantidad'] + "\n"
+                #             + "Costo Estimado Total de Artículo: "+ doc['Costo_Estimado_Total_de_Orden_de_Articulo'] + "\n"
+                #             + "Número de Contrato: "+ doc['Numero_de_Contrato'] + "\n"
+                #             + "Costo Final del Artículo: "+ doc['Costo_Final_de_Orden_de_Articulo'] + "\n"
+                #             + "Número de Orden de Compra: "+ doc['Numero_de_Orden_de_Compra'] + "\n"
+                #             + "Nombre de Archivo de Orden de Compra: "+ doc['Nombre_de_Archivo_de_Orden_de_Compra'] + "\n"
+                #             + "Nombre de Suplidor: "+ doc['Nombre_de_Suplidor'] + "\n"
+                #             + "Teléfono de Contacto del Suplidor: "+ doc['Telefono_de_Contacto_de_Suplidor'] + "\n"
+                #             + "Email del Suplidor: "+ doc['Email_de_Suplidor'] + "\n"
+                #             + "Url de Archivo de Orden De Compra: "+ archivo_url + "\n")
+
+                #             # Now handle the URL separately
+                #             archivo_url = doc['Url_de_Archivo_de_Orden_de_Compra']
+                            
+                #             # Create a clickable hyperlink (in HTML or markdown format)
+                #             # HTML format for a clickable link:
+                #             # hyperlink = f'<a href="{archivo_url}">Archivo de Orden de Compra</a>\n'
+                            
+                #             # Or if you're using markdown:
+                #             # hyperlink = f'[Archivo de Orden de Compra]({archivo_url})\n'
+
+                #             # Append both the formatted result and the hyperlink to search results
+                #             search_results.append(formatted_result + "-" * 120 + "\n\n" + hyperlink)  
