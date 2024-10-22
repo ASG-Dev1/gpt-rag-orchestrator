@@ -174,11 +174,6 @@ class Retrieval:
         # If you're using Flask or similar, you can return jsonify(search_results)
         # For now, we'll convert it to a string
         sources = search_results  # This is now a list of dictionaries
-        print("Sources")
-        print(sources)
-        print()
-        print("Search Results")
-        print(search_results)
         return sources
 
 

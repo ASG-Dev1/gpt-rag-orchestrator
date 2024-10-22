@@ -10,6 +10,7 @@ from orc.plugins.ResponsibleAI.Fairness.wrapper import fairness
 from semantic_kernel.functions.kernel_arguments import KernelArguments
 from shared.util import call_semantic_function, get_chat_history_as_messages, get_message, get_last_messages
 from shared.util import get_blocked_list, create_kernel, get_usage_tokens, escape_xml_characters
+from azure.cosmos.aio import CosmosClient # Fetch Chat History JAMR
 
 # logging level
 logging.getLogger('azure').setLevel(logging.WARNING)
@@ -41,8 +42,13 @@ ORCHESTRATOR_FOLDER = "orc"
 PLUGINS_FOLDER = f"{ORCHESTRATOR_FOLDER}/plugins"
 BOT_DESCRIPTION_FILE = f"{ORCHESTRATOR_FOLDER}/bot_description.prompt"
 
-async def get_answer(history):
+async def get_answer(history, client_principal_id):  # Added client_principal_id
 
+    print("JOSHUA TEST")
+    print(history)
+    print(client_principal_id)
+
+    
     #############################
     # INITIALIZATION
     #############################
@@ -156,7 +162,7 @@ async def get_answer(history):
                 # Run retrieval function
                 function_result = await kernel.invoke(
                     retrievalPlugin["VectorIndexRetrieval"],
-                    sk.KernelArguments(input=search_query)
+                    sk.KernelArguments(input=search_query, client_principal_id=client_principal_id)  # Added client_principal_id
                 )
                 sources = function_result.value  # 'sources' is a list
 
@@ -165,7 +171,6 @@ async def get_answer(history):
                 logging.info(f"[code_orchest] generating bot answer. sources: {formatted_sources}")
 
                 # Escape XML characters if necessary
-                # Assuming 'escape_xml_characters' can handle strings
                 escaped_sources = escape_xml_characters(json.dumps(sources))
 
                 # Assign to arguments; downstream functions expect a string
@@ -234,3 +239,4 @@ async def get_answer(history):
     logging.info(f"[code_orchest] finished RAG Flow. {response_time} seconds.")
 
     return answer_dict
+
