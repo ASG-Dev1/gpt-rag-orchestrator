@@ -14,4 +14,5 @@ tiktoken==0.5.2
 tenacity==8.2.3
 azure-cognitiveservices-search-customsearch==0.3.1
 beautifulsoup4==4.12.3
-pydantic==2.5.0  # This version resolves the 'StringConstraints' import issue.
+pydantic==2.5.0  # Ensures compatibility with openai and semantic-kernel
+Flask==2.2.5  # Add Flask version to your requirements (or update to the desired version)
