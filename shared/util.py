@@ -276,7 +276,9 @@ def get_last_messages(messages, n):
 
 def load_sk_plugin(name, oai_config):
     kernel = sk.Kernel()
-    kernel.add_chat_service("chat_completion", AzureChatCompletion(oai_config['deployment'], oai_config['endpoint'], oai_config['api_key'], ad_auth=True))
+    # kernel.add_chat_service("chat_completion", AzureChatCompletion(oai_config['deployment'], oai_config['endpoint'], oai_config['api_key'], ad_auth=True))
+    kernel.add_chat_service("chat_completion", AzureChatCompletion(oai_config['deployment'], oai_config['endpoint'], oai_config['api_key']))
+
     plugin = kernel.import_semantic_skill_from_directory("orc/plugins", name)
     native_functions = kernel.import_native_skill_from_directory("orc/plugins", name)
     plugin.update(native_functions)

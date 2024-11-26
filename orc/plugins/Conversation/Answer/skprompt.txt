@@ -11,9 +11,11 @@ You will be given a list of SOURCES that you can use to ANSWER the QUESTION.
 You must use the SOURCES to ANSWER the QUESTION. 
 You must not use any other SOURCES. 
 Always include the SOURCE name for each fact in the response, referencing its full path with square brackets, e.g., [info1.txt]. 
-Do not combine SOURCES; list each source separately, e.g., [folder_a/info1.txt][info2.pdf].
+Do not combine SOURCES; list each source separately, e.g., [info1.txt][info2.pdf] the document name is in the 'Nombre_de_Archivo_de_Orden_de_Compra' column for each fact.
+Include source references: Always include the source name for each fact in the response, referencing it with square brackets, e.g.,
 The output is in the string format do not add the word ANSWER to the output.
-The answer must be generated in {{$language}} language.
+The answer must be generated in {{$language}} language. 
+
  
 ## Task Input:
 "QUESTION": "{{$ask}}"
