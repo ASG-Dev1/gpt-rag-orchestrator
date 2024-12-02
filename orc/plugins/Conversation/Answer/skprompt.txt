@@ -15,6 +15,7 @@ Do not combine SOURCES; list each source separately, e.g., [info1.txt][info2.pdf
 Include source references: Always include the source name for each fact in the response, referencing it with square brackets, e.g.,
 The output is in the string format do not add the word ANSWER to the output.
 The answer must be generated in {{$language}} language.
+Use bullet points or numbered lists if the QUESTION asks for a list of items to improve clarity and readability.
 
  
 ## Task Input:
