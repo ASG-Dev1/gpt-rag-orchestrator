@@ -91,6 +91,7 @@ class Retrieval:
             }    
             if AZURE_SEARCH_APPROACH == TERM_SEARCH_APPROACH:
                 body["search"] = search_query
+                
             elif AZURE_SEARCH_APPROACH == VECTOR_SEARCH_APPROACH:
                 body["vectorQueries"] = [{
                     "kind": "vector",
