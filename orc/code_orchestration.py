@@ -147,7 +147,10 @@ async def get_answer(history, client_principal_id):  # Added client_principal_id
             completion_tokens += triage_dict["completion_tokens"]
             response_time = round(time.time() - start_time, 2)
             logging.info(f"[code_orchest] finished checking intents: {intents}. {response_time} seconds.")
-
+            
+    #############################
+    # HANDLE INTENTS
+    #############################
             # Handle general intents
             if set(intents).intersection({"about_bot", "off_topic"}):
                 answer = triage_dict['answer']
@@ -189,7 +192,14 @@ async def get_answer(history, client_principal_id):  # Added client_principal_id
                 prompt = str(function_result.metadata['messages'][0])
                 response_time = round(time.time() - start_time, 2)
                 logging.info(f"[code_orchest] finished generating bot answer. {response_time} seconds. {answer[:100]}.")
+                logging.info(f"Triage output: intents={intents}, search_query={triage_dict['search_query']}")
 
+            #Intent para responder al agradecimiento del usuario
+            elif "appreciation" in intents:
+                answer = "¡A la orden! ¿Hay algo más en lo que te pueda ayudar?"
+                answer_generated_by = "appreciation_intent_response"
+                logging.info(f"[code_orchest] appreciation detected. Response: {answer}")
+            
             elif "greeting" in intents:
                 answer = triage_dict['answer']
                 answer_generated_by = "conversation_plugin_triage"

@@ -84,6 +84,7 @@ class Retrieval:
             azureSearchKey = get_secret('azureSearchKey') 
 
             logging.info(f"[sk_retrieval] querying azure ai search. search query: {search_query}")
+            
             # prepare body
             body = {
                 "select": f"{title}, {content}, {url}, {filepath}, {chunkid} ",
@@ -167,6 +168,10 @@ class Retrieval:
 
                 response_time = round(time.time() - start_time, 2)
                 logging.info(f"[sk_retrieval] finished querying azure ai search. {response_time} seconds")
+                logging.info(f"Generated embeddings for query: {search_query}")
+                logging.info(f"Azure Search request body: {body}")
+                logging.info(f"Azure Search response: {response.json()}")
+
         except Exception as e:
             error_message = str(e)
             logging.error(f"[sk_retrieval] error when getting the answer {error_message}")
