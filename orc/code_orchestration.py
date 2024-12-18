@@ -1,5 +1,6 @@
 # imports
 import json
+import random
 import logging
 import os
 import semantic_kernel as sk
@@ -196,9 +197,14 @@ async def get_answer(history, client_principal_id):  # Added client_principal_id
 
             #Intent para responder al agradecimiento del usuario
             elif "appreciation" in intents:
-                answer = "¡A la orden! ¿Hay algo más en lo que te pueda ayudar?"
+                appreciation = [
+                    "¡A la orden! ¿Hay algo más en lo que te pueda ayudar?",
+                    "Es un placer ayudarte.",
+                    "Me alegra poder ayudarte, ¿necesitas algo más?"]
+                answer = random.choice(appreciation)
                 answer_generated_by = "appreciation_intent_response"
                 logging.info(f"[code_orchest] appreciation detected. Response: {answer}")
+
             
             elif "greeting" in intents:
                 answer = triage_dict['answer']
