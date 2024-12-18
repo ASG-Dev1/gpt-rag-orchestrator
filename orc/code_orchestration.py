@@ -44,8 +44,6 @@ PLUGINS_FOLDER = f"{ORCHESTRATOR_FOLDER}/plugins"
 BOT_DESCRIPTION_FILE = f"{ORCHESTRATOR_FOLDER}/bot_description.prompt"
 
 async def get_answer(history, client_principal_id):  # Added client_principal_id
-
-    print("JOSHUA TEST")
     print(history)
     print(client_principal_id)
 
@@ -148,6 +146,8 @@ async def get_answer(history, client_principal_id):  # Added client_principal_id
             completion_tokens += triage_dict["completion_tokens"]
             response_time = round(time.time() - start_time, 2)
             logging.info(f"[code_orchest] finished checking intents: {intents}. {response_time} seconds.")
+        
+     
             
     #############################
     # HANDLE INTENTS
@@ -199,8 +199,11 @@ async def get_answer(history, client_principal_id):  # Added client_principal_id
             elif "appreciation" in intents:
                 appreciation = [
                     "¡A la orden! ¿Hay algo más en lo que te pueda ayudar?",
-                    "Es un placer ayudarte.",
-                    "Me alegra poder ayudarte, ¿necesitas algo más?"]
+                    "Es un placer ayudarte, necesitas algo adicional?",
+                    "Me alegra poder ayudarte, ¿necesitas algo más?",
+                    "¿De nada, te puedo ayudar en algo más?",
+                    "Con gusto, siempre a la orden!",
+                    "Es un placer poder asistirte, no dudes en preguntar si necesitas algo más!"]
                 answer = random.choice(appreciation)
                 answer_generated_by = "appreciation_intent_response"
                 logging.info(f"[code_orchest] appreciation detected. Response: {answer}")

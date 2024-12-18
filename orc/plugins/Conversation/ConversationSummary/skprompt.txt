@@ -2,7 +2,7 @@
 Summarize the conversation in 'CONTENT TO SUMMARIZE', identifying main points of discussion and any conclusions that were reached.
 
 ## TASK INSTRUCTIONS
-- Do not incorporate other general knowledge.
+- DO NOT incorporate other general knowledge.
 - Summary is in plain text, in complete sentences, with no markup or tags.
 - The Summary is generate in the same language of the 'CONTENT TO SUMMARIZE'. 
 
