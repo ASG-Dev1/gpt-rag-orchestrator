@@ -1,5 +1,6 @@
 # imports
 import json
+import random
 import logging
 import os
 import semantic_kernel as sk
@@ -189,6 +190,19 @@ async def get_answer(history, client_principal_id):  # Added client_principal_id
                 prompt = str(function_result.metadata['messages'][0])
                 response_time = round(time.time() - start_time, 2)
                 logging.info(f"[code_orchest] finished generating bot answer. {response_time} seconds. {answer[:100]}.")
+            
+            
+            elif "appreciation" in intents:
+                appreciation = [
+                    "¡A la orden! ¿Hay algo más en lo que te pueda ayudar?",
+                    "Es un placer ayudarte, necesitas algo adicional?",
+                    "Me alegra poder ayudarte, ¿necesitas algo más?",
+                    "¿De nada, te puedo ayudar en algo más?",
+                    "Con gusto, siempre a la orden!",
+                    "Es un placer poder asistirte, no dudes en preguntar si necesitas algo más!"]
+                answer = random.choice(appreciation)
+                answer_generated_by = "appreciation_intent_response"
+                logging.info(f"[code_orchest] appreciation detected. Response: {answer}")
 
             elif "greeting" in intents:
                 answer = triage_dict['answer']
