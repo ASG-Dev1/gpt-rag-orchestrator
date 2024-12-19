@@ -183,6 +183,8 @@ async def get_answer(history, client_principal_id):  # Added client_principal_id
                 arguments["history"] = json.dumps(messages[:-1], ensure_ascii=False)  # Update context with full history
                 function_result = await call_semantic_function(kernel, conversationPlugin["Answer"], arguments)
                 answer = str(function_result)
+                # Clean up any unwanted prefixes
+                answer = answer.replace("RESPONSE:", "").replace("ANSWER:", "").strip()
                 conversation_plugin_answer = answer
                 answer_generated_by = "conversation_plugin_answer"
                 prompt_tokens += get_usage_tokens(function_result, 'prompt')
@@ -253,4 +255,5 @@ async def get_answer(history, client_principal_id):  # Added client_principal_id
     logging.info(f"[code_orchest] finished RAG Flow. {response_time} seconds.")
 
     return answer_dict
+
 
