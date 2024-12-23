@@ -219,7 +219,7 @@ async def get_answer(history, client_principal_id):  # Added client_principal_id
  
            
             elif "greeting" in intents:
-                greeting = ["Hola! En que te puedo ayudar?",
+                greeting = ["Hola! En que te puedo ayudar?", 
                             "Saludos, gracias por tu mensaje. ¿En qué puedo ayudarte?",
                             "Saludos, quedo a tu servicio para cualquier duda o consulta que tengas.",
                             "Gracias por tu saludo. ¿En qué te puedo asistir en este momento?",
