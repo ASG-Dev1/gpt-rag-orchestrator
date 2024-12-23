@@ -193,7 +193,7 @@ async def get_answer(history, client_principal_id):  # Added client_principal_id
                 response_time = round(time.time() - start_time, 2)
                 logging.info(f"[code_orchest] finished generating bot answer. {response_time} seconds. {answer[:100]}.")
             
-            
+            #Intent para responder al agradecimiento del usuario
             elif "appreciation" in intents:
                 appreciation = [
                     "¡A la orden! ¿Hay algo más en lo que te pueda ayudar?",
@@ -207,7 +207,14 @@ async def get_answer(history, client_principal_id):  # Added client_principal_id
                 logging.info(f"[code_orchest] appreciation detected. Response: {answer}")
 
             elif "greeting" in intents:
-                answer = triage_dict['answer']
+                greeting = ["Hola! En que te puedo ayudar?", 
+                            "Saludos, gracias por tu mensaje. ¿En qué puedo ayudarte?",
+                            "Saludos, quedo a tu servicio para cualquier duda o consulta que tengas.",
+                            "Gracias por tu saludo. ¿En qué te puedo asistir en este momento?",
+                            "Hola, estoy disponible para aclarar cualquier duda o comentario que desees plantear.",
+                            "Saludos, quedo a tu disposición para lo que necesites."]
+                answer = random.choice(greeting)
+                # answer = triage_dict['answer']
                 answer_generated_by = "conversation_plugin_triage"
                 logging.info(f"[code_orchest] triage answer: {answer}")
 
