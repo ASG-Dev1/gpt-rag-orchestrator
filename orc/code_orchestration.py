@@ -1,6 +1,5 @@
 # imports
 import json
-import re
 import random
 import logging
 import os
@@ -184,17 +183,17 @@ async def get_answer(history, client_principal_id):  # Added client_principal_id
                 arguments["history"] = json.dumps(messages[:-1], ensure_ascii=False)  # Update context with full history
                 function_result = await call_semantic_function(kernel, conversationPlugin["Answer"], arguments)
                 answer = str(function_result)
-
                 # Clean up any unwanted prefixes
-                # answer = answer.replace("RESPONSE:", "").replace("ANSWER:", "").strip()
-                words_to_delete = ['"RESPONSE":', '"ANSWER":', '"']
-                for word in words_to_delete: 
-                    answer = re.sub(re.escape(word), "", answer)
+                answer = answer.replace("RESPONSE:", "").replace("ANSWER:", "").replace("Fuentes:", "").replace("\\n", "").strip()
+                
+                # Check if the (now cleaned) string has a leading quote
+                if answer and answer[0] == '"':
+                    answer = answer[1:]
 
-                answer = answer.strip()
-                # Clean up any unwanted "" wrapping the response
-                # if answer.startswith('"') and answer.endswith('"'):
-                #     answer = answer[1:-1].strip()
+                # Check if it ends with a quote
+                if answer and answer[-1] == '"':
+                    answer = answer[:-1]
+                   
                 conversation_plugin_answer = answer
                 answer_generated_by = "conversation_plugin_answer"
                 prompt_tokens += get_usage_tokens(function_result, 'prompt')
@@ -202,7 +201,6 @@ async def get_answer(history, client_principal_id):  # Added client_principal_id
                 prompt = str(function_result.metadata['messages'][0])
                 response_time = round(time.time() - start_time, 2)
                 logging.info(f"[code_orchest] finished generating bot answer. {response_time} seconds. {answer[:100]}.")
-            
             
             #Intent para responder al agradecimiento del usuario
             elif "appreciation" in intents:
@@ -216,8 +214,7 @@ async def get_answer(history, client_principal_id):  # Added client_principal_id
                 answer = random.choice(appreciation)
                 answer_generated_by = "appreciation_intent_response"
                 logging.info(f"[code_orchest] appreciation detected. Response: {answer}")
- 
-           
+
             elif "greeting" in intents:
                 greeting = ["Hola! En que te puedo ayudar?", 
                             "Saludos, gracias por tu mensaje. ¿En qué puedo ayudarte?",
