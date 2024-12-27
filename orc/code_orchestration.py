@@ -184,7 +184,7 @@ async def get_answer(history, client_principal_id):  # Added client_principal_id
                 function_result = await call_semantic_function(kernel, conversationPlugin["Answer"], arguments)
                 answer = str(function_result)
                 # Clean up any unwanted prefixes
-                answer = answer.replace("RESPONSE:", "").replace("ANSWER:", "").replace("Fuentes:", "").replace("\\n", "").strip()
+                answer = answer.replace('RESPONSE": "', "").replace('ANSWER": "', "").replace("Fuentes:", "").replace("\\n", "").strip()
                 
                 # Check if the (now cleaned) string has a leading quote
                 if answer and answer[0] == '"':
